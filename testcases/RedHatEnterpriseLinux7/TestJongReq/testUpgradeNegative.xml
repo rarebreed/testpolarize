@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wit:WorkItem xmlns:wit="com.redhat.qe.rhsm.WorkItemType" xmlns:pt="com.redhat.qe.rhsm.PolarizeTypes" xmlns:req="com.redhat.qe.rhsm.RequirementType" xmlns:tc="com.redhat.qe.rhsm.TestCaseType" project-id="RedHatEnterpriseLinux7" type="TestCase">
+    <wit:testcase project="RedHatEnterpriseLinux7" author="Sean Toner" workitem-type="TestCase" workitem-id="RHEL7-56743">
+        <tc:description>A simple test for polarize</tc:description>
+        <tc:title>com.redhat.qe.rhsm.testpolarize.TestReq.testUpgradeNegative</tc:title>
+        <tc:caseimportance value="medium"/>
+        <tc:caselevel value="component"/>
+        <tc:testtype value="non_functional"/>
+        <tc:caseposneg value="negative"/>
+        <tc:caseautomation value="automated"/>
+        <tc:status value="draft"/>
+        <tc:requirements>
+            <tc:requirement project="RedHatEnterpriseLinux7" id="" severity="Must Have" priority="medium" reqtype="Functional">
+                <req:author xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></req:author>
+                <req:description xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">This description will override class level</req:description>
+            </tc:requirement>
+        </tc:requirements>
+    </wit:testcase>
+</wit:WorkItem>

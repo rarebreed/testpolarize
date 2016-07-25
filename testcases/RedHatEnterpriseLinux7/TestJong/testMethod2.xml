@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wit:WorkItem xmlns:wit="com.redhat.qe.rhsm.WorkItemType" xmlns:pt="com.redhat.qe.rhsm.PolarizeTypes" xmlns:req="com.redhat.qe.rhsm.RequirementType" xmlns:tc="com.redhat.qe.rhsm.TestCaseType" project-id="RedHatEnterpriseLinux7" type="TestCase">
+    <wit:testcase project="RedHatEnterpriseLinux7" author="CI User" workitem-type="TestCase" workitem-id="">
+        <tc:title>com.redhat.qe.rhsm.testpolarize.TestPolarize.testMethod2</tc:title>
+        <tc:caseimportance value="high"/>
+        <tc:caselevel value="component"/>
+        <tc:testtype value="functional"/>
+        <tc:caseposneg value="positive"/>
+        <tc:caseautomation value="automated"/>
+        <tc:status value="draft"/>
+        <tc:requirements/>
+    </wit:testcase>
+</wit:WorkItem>
