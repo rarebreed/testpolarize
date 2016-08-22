@@ -2,4 +2,7 @@
 .gradle/
 gradle/
 build/
+test-output/
+testcases/
+requirements/
 *.iml

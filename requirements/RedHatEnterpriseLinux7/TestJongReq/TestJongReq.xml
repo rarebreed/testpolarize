@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wit:WorkItem xmlns:wit="com.redhat.qe.rhsm.WorkItemType" xmlns:pt="com.redhat.qe.rhsm.PolarizeTypes" xmlns:req="com.redhat.qe.rhsm.RequirementType" xmlns:tc="com.redhat.qe.rhsm.TestCaseType" project-id="RedHatEnterpriseLinux7" type="Requirement">
-    <wit:requirement project="RedHatEnterpriseLinux7" id="" severity="Must Have" priority="medium" reqtype="Functional">
-        <req:author xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">CI User</req:author>
-        <req:description xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">Class level Requirement for RHEL7</req:description>
-    </wit:requirement>
-</wit:WorkItem>

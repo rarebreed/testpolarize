@@ -1,8 +1,15 @@
-package com.redhat.qe.rhsm.testpolarize;
+package com.github.redhatqe.rhsm.testpolarize;
 
-import com.redhat.qe.rhsm.metadata.Requirement;
-import com.redhat.qe.rhsm.metadata.TestCase;
+
+import com.github.redhatqe.polarize.metadata.Requirement;
+import com.github.redhatqe.polarize.metadata.TestDefinition;
+import org.testng.Assert;
+import org.testng.AssertJUnit;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A dummy example showing how to use the annotations.  Since these are repeating annotations, that means that the
@@ -18,11 +25,11 @@ import org.testng.annotations.Test;
              description="Class level Requirement for RHEL7")
 public class TestReq {
 
-    @TestCase(projectID="RHEL6",
+    @TestDefinition(projectID="RHEL6",
               description="TestCase for a dummy test method",
               xmlDesc="",
               reqs={})
-    @TestCase(author="Sean Toner",                 // required
+    @TestDefinition(author="Sean Toner",                 // required
               projectID="RedHatEnterpriseLinux7",  // required
               testCaseID="RHEL7-56743",            // if empty or null, make request to WorkItem Importer tool
               caseimportance="medium",             // defaults to high  if not given
@@ -33,13 +40,31 @@ public class TestReq {
                                                    // look for xmlDesc.  If none, that means request one.
                                  project="RedHatEnterpriseLinux7",
                                  description="This description will override class level",
-                                 xmlDesc="/path/to/xml/description",
-                                 feature="/path/to/a/gherkin/feature/file")},
+                                 xmlDesc="/tmp/path/to/xml/description/testUpgradeNegative.xml",
+                                 feature="/tmp/path/to/a/gherkin/file/requirements.feature")},
               setup="Description of any preconditions that must be established for test case to run",
               teardown="The methods to clean up after a test method")
-    @Test(groups={"testjong_polarize"},
-          description="A simple test for polarize")
-    public void testUpgradeNegative() {
-         System.out.println("Dummy negative test");
+    @Test(groups={"simple"},
+          description="Test for reporter code",
+          dataProvider="simpleProvider")
+    public void testUpgradeNegative(String name, int age) {
+        AssertJUnit.assertEquals(age, 44);
+        Assert.assertTrue(name.equals("Sean"));
+    }
+
+    @DataProvider(name="simpleProvider")
+    public Object[][] dataDriver() {
+        Object[][] table = new Object[2][2];
+        List<Object> row = new ArrayList<>();
+
+        row.add("Sean");
+        row.add(44);
+        table[0] = row.toArray();
+
+        row = new ArrayList<>();
+        row.add("Toner");
+        row.add(0);
+        table[1] = row.toArray();
+        return table;
     }
 }

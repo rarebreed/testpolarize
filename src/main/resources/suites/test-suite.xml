@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="XUnitImporter TestSuite">
+    <listeners>
+        <listener class-name="com.github.redhatqe.polarize.junitreporter.XUnitReporter"/>
+    </listeners>
+    <test name="Sanity Test">
+        <groups>
+            <run>
+                <include name="simple" />
+            </run>
+        </groups>
+        <classes>
+            <class name="com.github.redhatqe.rhsm.testpolarize.TestReq" />
+        </classes>
+    </test>
+</suite>
