@@ -26,6 +26,18 @@ dependencies {
     compile 'org.testng:testng:6.9.10'
 }
 
+// FIXME: I don't know why this doesn't work
+test {
+    useTestNG() {
+        testLogging.showStandardStreams = true
+        testLogging.showStackTraces = true
+        systemProperties System.getProperties()
+        //scanForTestClasses = false
+        //include 'com/github/redhatqe/rhsm/testpolarize/**'
+        suiteXmlFiles << new File(rootDir, 'src/main/resources/suites/test-suite.xml')
+        println suiteXmlFiles
+    }
+}
 
 shadowJar {
     manifest {
