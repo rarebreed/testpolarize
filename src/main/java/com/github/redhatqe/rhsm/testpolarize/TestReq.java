@@ -1,8 +1,12 @@
 package com.github.redhatqe.rhsm.testpolarize;
 
 
+import com.github.redhatqe.polarize.metadata.DefTypes;
 import com.github.redhatqe.polarize.metadata.Requirement;
 import com.github.redhatqe.polarize.metadata.TestDefinition;
+import com.github.redhatqe.polarize.metadata.TestType;
+import com.github.redhatqe.polarize.metadata.DefTypes.Project;
+
 import org.testng.Assert;
 import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
@@ -17,28 +21,33 @@ import java.util.List;
  *
  * Created by stoner on 7/12/16.
  */
-@Requirement(project="RHEL6", author="Sean Toner",
+@Requirement(project=Project.RHEL6,
+             author="Sean Toner",
              description="Class level Requirement for RHEL 6.  All test methods will inherit from a class annotated " +
                      "with @Requirement.  If a test method's @Polarion annotation has a non-empty reqs field, any " +
                      "@Requirements there will override the class Requirement for that method")
-@Requirement(project="RedHatEnterpriseLinux7", author="CI User",
+@Requirement(project=Project.RedHatEnterpriseLinux7,
+             author="CI User",
              description="Class level Requirement for RHEL7")
 public class TestReq {
 
-    @TestDefinition(projectID="RHEL6",
+    @TestDefinition(projectID=Project.RHEL6,
               description="TestCase for a dummy test method",
-              xmlDesc="",
+              title="A not necessarily unique title",  // defaults to class.methodName
               reqs={})
-    @TestDefinition(author="Sean Toner",                 // required
-              projectID="RedHatEnterpriseLinux7",  // required
-              testCaseID="RHEL7-56743",            // if empty or null, make request to WorkItem Importer tool
-              caseimportance="medium",             // defaults to high  if not given
-              caseposneg="negative",               // defaults to positive if not given
-              caselevel="component",               // defaults to component if not given
-              testtype="non_functional",           // defaults to functional if not given
+    @TestDefinition(author="stoner",               // defaults to CI User
+              projectID=Project.PLATTP,            // required
+              testCaseID="PLATTP-9520",            // if empty or null, make request to WorkItem Importer tool
+              importance=DefTypes.Importance.HIGH, // defaults to high  if not given
+              posneg=DefTypes.PosNeg.NEGATIVE,     // defaults to positive if not given
+              level= DefTypes.Level.COMPONENT,     // defaults to component if not given
+              // If testtype is FUNCTIONAL, subtype1 and 2 must be of type EMPTY.
+              testtype=@TestType(testtype= DefTypes.TestTypes.NONFUNCTIONAL,  // Defaults to FUNCTIONAL
+                                 subtype1= DefTypes.Subtypes.COMPLIANCE,      // Defaults to EMPTY (see note)
+                                 subtype2= DefTypes.Subtypes.EMPTY),          // Defaults to EMPTY (see note)
               reqs={@Requirement(id="",            // if empty, look for class Requirement.  If no class requirement
                                                    // look for xmlDesc.  If none, that means request one.
-                                 project="RedHatEnterpriseLinux7",
+                                 project=Project.RedHatEnterpriseLinux7,
                                  description="This description will override class level",
                                  xmlDesc="/tmp/path/to/xml/description/testUpgradeNegative.xml",
                                  feature="/tmp/path/to/a/gherkin/file/requirements.feature")},
