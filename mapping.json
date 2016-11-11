@@ -1,0 +1,50 @@
+{
+  "com.github.redhatqe.rhsm.testpolarize.TestPolarize.testMethod" : {
+    "PLATTP" : {
+      "id" : "PLATTP-10069",
+      "parameters" : [ ]
+    },
+    "RHEL6" : {
+      "id" : "RHEL6-35764",
+      "parameters" : [ ]
+    }
+  },
+  "com.github.redhatqe.rhsm.testpolarize.TestPolarize.testMethod2" : {
+    "RedHatEnterpriseLinux7" : {
+      "id" : "",
+      "parameters" : [ ]
+    }
+  },
+  "com.github.redhatqe.rhsm.testpolarize.TestReq.testBadProjectToTestCaseID" : {
+    "PLATTP" : {
+      "id" : "PLATTP-10202",
+      "parameters" : [ ]
+    }
+  },
+  "com.github.redhatqe.rhsm.testpolarize.TestReq.testError" : {
+    "PLATTP" : {
+      "id" : "PLATTP-10203",
+      "parameters" : [ ]
+    }
+  },
+  "com.github.redhatqe.rhsm.testpolarize.TestReq.testUpgrade" : {
+    "PLATTP" : {
+      "id" : "PLATTP-10068",
+      "parameters" : [ "name", "age" ]
+    },
+    "RHEL6" : {
+      "id" : "",
+      "parameters" : [ "name", "age" ]
+    }
+  },
+  "com.github.redhatqe.rhsm.testpolarize.TestReq.testUpgradeNegative" : {
+    "PLATTP" : {
+      "id" : "PLATTP-9520",
+      "parameters" : [ "name", "age" ]
+    },
+    "RHEL6" : {
+      "id" : "",
+      "parameters" : [ "name", "age" ]
+    }
+  }
+}
