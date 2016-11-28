@@ -1,18 +1,25 @@
 package com.github.redhatqe.rhsm.testpolarize;
 
 
+import com.github.redhatqe.polarize.IJAXBHelper;
+import com.github.redhatqe.polarize.JAXBHelper;
 import com.github.redhatqe.polarize.exceptions.ConfigurationError;
+import com.github.redhatqe.polarize.importer.testcase.CustomField;
+import com.github.redhatqe.polarize.importer.testcase.Testcase;
 import com.github.redhatqe.polarize.metadata.*;
 import com.github.redhatqe.polarize.metadata.DefTypes.Project;
 import com.github.redhatqe.polarize.metadata.DefTypes.PosNeg;
 
 import org.testng.Assert;
-import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A dummy example showing how to use the annotations.  Since these are repeating annotations, that means that the
@@ -24,6 +31,16 @@ import java.util.List;
  * Created by stoner on 7/12/16.
  */
 public class TestReq {
+    String RHEL6 = "RHEL6";
+    String PLATTP = "PLATTP";
+
+    /**
+     * Set the XML config to use basedir of testpolarize
+     */
+    @BeforeSuite
+    public void setXMLConfig() {
+
+    }
 
     @TestDefinition(projectID=Project.RHEL6,
               description="TestCase for a dummy test method",
@@ -50,8 +67,79 @@ public class TestReq {
           description="Test for reporter code",
           dataProvider="simpleProvider")
     public void testUpgradeNegative(String name, int age) {
-        AssertJUnit.assertEquals(age, 44);
+        Assert.assertEquals(age, 44);
         Assert.assertTrue(name.equals("Sean"));
+        String methName = "testUpgradeNegative";
+
+        // Test that testcases/RHEL6/com.github.redhatqe.rhsm.testpolarize.TestReq/testUpgradeNegative.xml exists
+        this.verifyXMLExists(RHEL6, methName);
+
+        // Test that testcases/PLATTP/com.github.redhatqe.rhsm.testpolarize.TestReq/testUpgradeNegative.xml exists
+        this.verifyXMLExists(PLATTP, methName);
+
+        // Verify that XML that gets generated for RHEL6 and PLATTP has Polarion ID.
+        this.verifyNoIDYetForXML(RHEL6, methName);
+        this.verifyIDExistsForXML(PLATTP, methName);
+
+        // Verify that the testtype for RHEL6 has different defaults than for PLATTP
+        Optional<Testcase> maybeRHEL6 = this.getObjectFromXML(RHEL6, methName, Testcase.class);
+        Optional<Testcase> maybePLATTP = this.getObjectFromXML(PLATTP, methName, Testcase.class);
+        if (maybeRHEL6.isPresent() && maybePLATTP.isPresent()) {
+            Testcase rhel6 = maybeRHEL6.get();
+            Testcase plattp = maybePLATTP.get();
+            Optional<CustomField> rhel6FldM = rhel6.getCustomFields().getCustomField().stream()
+                    .filter(cf -> cf.getId().equals("testtype")).findFirst();
+            Optional<CustomField> plattpFldM = plattp.getCustomFields().getCustomField().stream()
+                    .filter(cf -> cf.getId().equals("testtype")).findFirst();
+            Assert.assertTrue(rhel6FldM.isPresent());
+            Assert.assertTrue(plattpFldM.isPresent());
+            if (rhel6FldM.isPresent() && plattpFldM.isPresent()) {
+                CustomField rhel6Fld = rhel6FldM.get();
+                CustomField plattpFld = plattpFldM.get();
+                Assert.assertFalse(rhel6Fld.getContent().equals(plattpFld.getContent()));
+            }
+        }
+
+        // Verify that the Linked WorkItem
+    }
+
+    public File getXMLDescFile(String project, String name) {
+        //String pkg = this.getClass().getPackage().getName();
+        String clz = this.getClass().getName();
+        //pkg = String.format("%s.%s", pkg, clz);
+        String tcDir = Paths.get(".", "/testcases", project, clz).toAbsolutePath().normalize().toString();
+        tcDir = String.format("%s/%s.xml", tcDir, name);
+        return new File(tcDir);
+    }
+
+    public void verifyXMLExists(String project, String name) {
+        File pathName = this.getXMLDescFile(project, name);
+        Assert.assertTrue(pathName.exists());
+    }
+
+    public <T> Optional<T> getObjectFromXML(String project, String name, Class<T> tc) {
+        File xmlDesc = this.getXMLDescFile(project, name);
+        JAXBHelper jaxb = new JAXBHelper();
+        return IJAXBHelper.unmarshaller(tc, xmlDesc, jaxb.getXSDFromResource(Testcase.class));
+    }
+
+    public void verifyIDExistsForXML(String project, String name) {
+        Optional<Testcase> maybeTC = this.getObjectFromXML(project, name, Testcase.class);
+        Assert.assertTrue(maybeTC.isPresent());
+        if (maybeTC.isPresent()) {
+            Testcase tc = maybeTC.get();
+            Assert.assertFalse(tc.getId().equals(""));
+        }
+        // TODO: when there is a query mechanism in place, query for the existence of this Polarion ID
+    }
+
+    public void verifyNoIDYetForXML(String project, String name) {
+        Optional<Testcase> maybeTC = this.getObjectFromXML(project, name, Testcase.class);
+        Assert.assertTrue(maybeTC.isPresent());
+        if (maybeTC.isPresent()) {
+            Testcase tc = maybeTC.get();
+            Assert.assertTrue(tc.getId().equals(""));
+        }
     }
 
     /**

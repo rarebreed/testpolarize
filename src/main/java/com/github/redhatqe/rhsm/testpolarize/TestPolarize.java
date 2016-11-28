@@ -7,7 +7,18 @@ import com.github.redhatqe.polarize.metadata.TestStep;
 import org.testng.annotations.Test;
 
 /**
- * Created by stoner on 6/28/16.
+ * TODO: Running list of things to test
+ *
+ * - Create a test that fails with an exception, and make sure that the xunit file has this exception
+ * - Verify that for every element in the mapping.json file, the XML exists with that ID
+ * - Verify that for every XML description file in testcases folder, it exists in the mapping.json
+ * - Ensure that a file is created that lists every method whose annotation is testCaseID="", but the XML has it
+ * - Ensure that the indexes of the project array matches the inde
+ *
+ * Future work:
+ * - Need a TestCase query method for updating.
+ *   - We only want to change what is different
+ *   - Verify that the
  */
 public class TestPolarize {
     public TestPolarize() {
