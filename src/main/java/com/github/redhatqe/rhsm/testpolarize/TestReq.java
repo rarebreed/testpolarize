@@ -1,8 +1,11 @@
 package com.github.redhatqe.rhsm.testpolarize;
 
 
+import com.github.redhatqe.polarize.FileHelper;
 import com.github.redhatqe.polarize.IJAXBHelper;
+import com.github.redhatqe.polarize.IdParams;
 import com.github.redhatqe.polarize.JAXBHelper;
+import com.github.redhatqe.polarize.configuration.Configurator;
 import com.github.redhatqe.polarize.exceptions.ConfigurationError;
 import com.github.redhatqe.polarize.importer.testcase.CustomField;
 import com.github.redhatqe.polarize.importer.testcase.Testcase;
@@ -16,9 +19,12 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -31,24 +37,15 @@ import java.util.Optional;
  * Created by stoner on 7/12/16.
  */
 public class TestReq {
-    String RHEL6 = "RHEL6";
-    String PLATTP = "PLATTP";
+    private final String RHEL6 = "RHEL6";
+    private final String RedHatEnterpriseLinux = "RedHatEnterpriseLinux";
+    private final String PLATTP = "PLATTP";
+    private Map<String, Map<String, IdParams>> mapFile;
+    private final String configPath = "/tmp/xml-config-testing.xml";
 
-    /**
-     * Set the XML config to use basedir of testpolarize
-     */
-    @BeforeSuite
-    public void setXMLConfig() {
-
-    }
-
-    @TestDefinition(projectID=Project.RHEL6,
-              description="TestCase for a dummy test method",
-              title="A not necessarily unique title",  // defaults to class.methodName
-              reqs={})
     @TestDefinition(projectID=Project.PLATTP,      // required
               testCaseID="PLATTP-9520",            // if empty or null, make request to WorkItem Importer tool
-              importance=DefTypes.Importance.LOW,  // defaults to high  if not given
+              importance=DefTypes.Importance.HIGH, // defaults to high  if not given
               posneg=PosNeg.NEGATIVE,              // defaults to positive if not given
               level= DefTypes.Level.COMPONENT,     // defaults to component if not given
               linkedWorkItems={@LinkedItem(workitemId="PLATTP-10348",         // Required
@@ -61,7 +58,6 @@ public class TestReq {
               setup="Description of any preconditions that must be established for test case to run",
               tags="tier1 some_description",
               teardown="The methods to clean up after a test method",
-              update=true,
               automation=DefTypes.Automation.AUTOMATED)  // if not given this defaults to AUTOMATED)
     @Test(groups={"simple"},
           description="Test for reporter code",
@@ -72,13 +68,13 @@ public class TestReq {
         String methName = "testUpgradeNegative";
 
         // Test that testcases/RHEL6/com.github.redhatqe.rhsm.testpolarize.TestReq/testUpgradeNegative.xml exists
-        this.verifyXMLExists(RHEL6, methName);
+        this.verifyXMLDoesntExist(RHEL6, methName);
 
         // Test that testcases/PLATTP/com.github.redhatqe.rhsm.testpolarize.TestReq/testUpgradeNegative.xml exists
         this.verifyXMLExists(PLATTP, methName);
 
         // Verify that XML that gets generated for RHEL6 and PLATTP has Polarion ID.
-        this.verifyNoIDYetForXML(RHEL6, methName);
+        //this.verifyNoIDYetForXML(RHEL6, methName);
         this.verifyIDExistsForXML(PLATTP, methName);
 
         // Verify that the testtype for RHEL6 has different defaults than for PLATTP
@@ -117,6 +113,11 @@ public class TestReq {
         Assert.assertTrue(pathName.exists());
     }
 
+    public void verifyXMLDoesntExist(String project, String name) {
+        File pathName = this.getXMLDescFile(project, name);
+        Assert.assertFalse(pathName.exists());
+    }
+
     public <T> Optional<T> getObjectFromXML(String project, String name, Class<T> tc) {
         File xmlDesc = this.getXMLDescFile(project, name);
         JAXBHelper jaxb = new JAXBHelper();
@@ -142,6 +143,13 @@ public class TestReq {
         }
     }
 
+    public Map<String, Map<String, IdParams>> getMapping(String path) throws IOException {
+        File mapPath = Paths.get(path).toFile();
+        if (!mapPath.exists())
+            throw new IOException(String.format("No mapping.json exists at %s", path));
+        return FileHelper.loadMapping(mapPath);
+    }
+
     /**
      * Shows an example of duplicated TestDefinition
      *
@@ -164,17 +172,19 @@ public class TestReq {
      * @param name
      * @param age
      */
-    @TestDefinition(projectID={Project.PLATTP, Project.RHEL6})
+    @TestDefinition(projectID={Project.PLATTP})
     @Test(groups={"simple"},
           description="A simple annotation that automatically gets parameter names from method source ",
           dataProvider="simpleProvider")
     public void testUpgrade(String name, int age) {
+        String methName = Thread.currentThread().getStackTrace()[0].getMethodName();
         Assert.assertTrue(name.equals("Sean") || name.equals("Toner"));
         Assert.assertTrue(age < 100);
+
+        this.verifyXMLDoesntExist(RedHatEnterpriseLinux, methName);
     }
 
     @TestDefinition(projectID={Project.PLATTP},
-    update=true,
     importance=DefTypes.Importance.LOW)
     @Test(groups={"simple"},
           description="Testing if XUnitReporter gets stack trace")

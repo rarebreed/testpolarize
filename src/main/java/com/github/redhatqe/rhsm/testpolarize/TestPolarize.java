@@ -26,9 +26,6 @@ public class TestPolarize {
     }
 
     @TestDefinition(projectID=Project.PLATTP,
-    reqs={})
-    @TestDefinition(projectID=Project.RHEL6,
-              testCaseID="RHEL6-35764",
               setup="Description of preconditions that must be true for test to run",
               teststeps={@TestStep(description="Fulfills requirement",
                                    expected="does not throw exception")},
@@ -40,10 +37,11 @@ public class TestPolarize {
         System.out.println("In testMethod");
     }
 
-    @TestDefinition(projectID=Project.RedHatEnterpriseLinux7,
+    @TestDefinition(projectID=Project.PLATTP,
                     setup="This is how you setup the test",
+                    script="Path to the script that implements this test",
                     description="Since this is not an @Test annotated method, must provide description")
-    public void testMethod2() {
+    public void yetAnotherTestMethod() {
 
     }
 }
