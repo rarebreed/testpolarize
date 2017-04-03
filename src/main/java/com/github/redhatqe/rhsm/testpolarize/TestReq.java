@@ -5,7 +5,6 @@ import com.github.redhatqe.polarize.FileHelper;
 import com.github.redhatqe.polarize.IJAXBHelper;
 import com.github.redhatqe.polarize.IdParams;
 import com.github.redhatqe.polarize.JAXBHelper;
-import com.github.redhatqe.polarize.configuration.Configurator;
 import com.github.redhatqe.polarize.exceptions.ConfigurationError;
 import com.github.redhatqe.polarize.importer.testcase.CustomField;
 import com.github.redhatqe.polarize.importer.testcase.Testcase;
@@ -14,13 +13,11 @@ import com.github.redhatqe.polarize.metadata.DefTypes.Project;
 import com.github.redhatqe.polarize.metadata.DefTypes.PosNeg;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -199,6 +196,25 @@ public class TestReq {
           description="Tests to make sure that the compiler fails")
     public void testBadProjectToTestCaseID() {
         Assert.assertTrue(true);
+    }
+
+
+    @TestDefinition(projectID=Project.PLATTP,    // required
+            testCaseID="",                       // if empty or null, make request to WorkItem Importer tool
+            importance=DefTypes.Importance.LOW, // defaults to high  if not given
+            posneg=PosNeg.POSITIVE,              // defaults to positive if not given
+            level= DefTypes.Level.COMPONENT,     // defaults to component if not given
+            // If testtype is FUNCTIONAL, subtype1 and 2 must be of type EMPTY.
+            testtype=@TestType(testtype= DefTypes.TestTypes.NONFUNCTIONAL,  // Defaults to FUNCTIONAL
+                    subtype1= DefTypes.Subtypes.COMPLIANCE,      // Defaults to EMPTY (see note)
+                    subtype2= DefTypes.Subtypes.EMPTY),          // Defaults to EMPTY (see note)
+            setup="Description of any preconditions that must be established for test case to run",
+            tags="tier1 some_description test-req",
+            teardown="The methods to clean up after a test method",
+            update=true,
+            automation=DefTypes.Automation.AUTOMATED)  // if not given this defaults to AUTOMATED)
+    public void testTestDefinition() {
+
     }
 
     @DataProvider(name="simpleProvider")

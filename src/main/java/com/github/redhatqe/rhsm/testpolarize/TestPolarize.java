@@ -1,10 +1,11 @@
 package com.github.redhatqe.rhsm.testpolarize;
 
 
+import com.github.redhatqe.polarize.metadata.*;
 import com.github.redhatqe.polarize.metadata.DefTypes.Project;
-import com.github.redhatqe.polarize.metadata.TestDefinition;
-import com.github.redhatqe.polarize.metadata.TestStep;
+import com.github.redhatqe.polarize.metadata.DefTypes.PosNeg;
 import org.testng.annotations.Test;
+import org.testng.Assert;
 
 /**
  * TODO: Running list of things to test
@@ -37,11 +38,40 @@ public class TestPolarize {
         System.out.println("In testMethod");
     }
 
-    @TestDefinition(projectID=Project.PLATTP,
-                    setup="This is how you setup the test",
-                    script="Path to the script that implements this test",
-                    description="Since this is not an @Test annotated method, must provide description")
+    @TestDefinition(projectID=Project.PLATTP,    // required
+            testCaseID="",                       // if empty or null, make request to WorkItem Importer tool
+            importance=DefTypes.Importance.HIGH, // defaults to high  if not given
+            posneg=PosNeg.POSITIVE,              // defaults to positive if not given
+            level= DefTypes.Level.SYSTEM,     // defaults to component if not given
+            //linkedWorkItems={@LinkedItem(workitemId="PLATTP-9520 ",         // Required
+            //        project=Project.PLATTP,                                 // Required. What Project to go under
+            //        role=DefTypes.Role.RELATES_TO)},                        // Required. Role type
+            // If testtype is FUNCTIONAL, subtype1 and 2 must be of type EMPTY.
+            testtype=@TestType(testtype= DefTypes.TestTypes.NONFUNCTIONAL,  // Defaults to FUNCTIONAL
+                    subtype1= DefTypes.Subtypes.COMPLIANCE,      // Defaults to EMPTY (see note)
+                    subtype2= DefTypes.Subtypes.EMPTY),          // Defaults to EMPTY (see note)
+            setup="Description of any preconditions that must be established for test case to run",
+            tags="tier1 polarize_test foo",
+            teardown="The methods to clean up after a test method",
+            update=true,
+            automation=DefTypes.Automation.AUTOMATED)  // if not given this defaults to AUTOMATED)
+    @Test(groups={"simple"},
+            description="Test for reporter code",
+            dataProvider="simpleProvider")
     public void yetAnotherTestMethod() {
 
+    }
+
+    @Test( groups={"testpolarize"}
+         , description = "This test should show up in the auditing tool")
+    public void testWithoutTD() {
+        // TODO: open the /tmp/polarize-auditing.txt, and check this method name is there
+        Assert.assertTrue(true);
+    }
+
+    @Test( groups={"no-test-definition"}
+         , description="Another test without @TestDefinition")
+    public void testAnotherWithoutTD() {
+        Assert.assertTrue(true);
     }
 }

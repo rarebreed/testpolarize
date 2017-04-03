@@ -9,7 +9,8 @@ pushd ${POLARIZE_PATH}
 function configure () {
     java -cp $1/build/libs/polarize-${2}-all.jar \
     com.github.redhatqe.polarize.configuration.Configurator \
-    --project $3 --testcase-importer-enabled $4 --base-dir /home/stoner/Projects/testpolarize --edit-config true --project-name testpolarize
+    --project $3 --testcase-importer-enabled $4 --base-dir /home/stoner/Projects/testpolarize \
+    --edit-config true --project-name testpolarize
 }
 
 # Make sure it's set to project=PLATTP and testcase importer is enabled
